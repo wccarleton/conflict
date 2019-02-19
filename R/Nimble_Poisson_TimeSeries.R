@@ -25,12 +25,12 @@ poisTSCode <- nimbleCode({
    }
 })
 
-#the Classic Maya period is conventionally considered to have eneded around 900 CE
+#the Classic Maya period is conventionally considered to have ended around 900 CE
 #in order to analyze different segments of the time-series, change the start variable
 start <- 600
 index <- c(1+(start-292):608)#292:900
-s
-#this script and the above Nimble code was used for anlayses invovling no covsariates
+
+#this script and the above Nimble code was used for analyses involving covariates
 #to see the potential covariates for use in the companion script provided in the same git archive:
 #head(MayaConflict_1y)
 Y <- MayaConflict_1y[index,2]
