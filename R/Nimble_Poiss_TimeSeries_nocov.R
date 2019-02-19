@@ -10,22 +10,15 @@ poisTSCode <- nimbleCode({
       Y[j] ~ dpois(XBase[j]*exp(lambda[j]))
    }
 })
-#index <- 88:609 #379-900
-#index <- 309:609 #600-900
-#index <- 1:706 #all
-#index <- c(88:590)
-#index <- c(1:609)#292-900
+
+#the Classic Maya period is conventionally considered to have eneded around 900 CE
+#in order to analyze different segments of the time-series, change the start variable
 start <- 292
-#index <- c(1+(start-292):87)#start-379
-#index <- c(1+(start-292):308)#start-600
 index <- c(1+(start-292):608)#start-900
-#index <- 88:609 #379-900
-#index <- 88:509 #379–800
-#index <- 88:706 #379-end
-#index <- 59:609 #350–900
-#index <- 88:590 #379–881
-#index <- c(72:597)#363-881
-#index <- c(72:622)#363-913
+
+#this script and the above Nimble code was used for anlayses invovling no covsariates
+#to see the potential covariates for use in the companion script provided in the same git archive:
+#head(MayaConflict_1y)
 Y <- MayaConflict_1y[index,2]
 T <- length(Y)
 XBase <- MayaConflict_1y[index,4]
@@ -68,12 +61,12 @@ set.seed(1)
 #call the C++ compiled MCMC model
 C_poisTSModelMCMC$run(niter)
 
-#save the MCMC chain (monitored variables) as a matrix
+#save the MCMC chain (monitored variables) as a matrix (of course, change the PATH)
 samples <- as.matrix(C_poisTSModelMCMC$mvSamples)
 save(samples,file="../Results/MCMC_Chains/mcmc_model_0_whole_Classic.RData")
 
-###
-###get log_prob col indeces
-print(C_poisTSModelMCMC$calculateWAIC(nburnin=100000))
+#get log_prob col indeces
 cols <- grep("log*",colnames(samples))
+
+#print the log_prob for the data given the model
 print(prod(colMeans(exp(samples[100000:200000,cols]))))
